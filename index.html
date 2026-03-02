@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Masjid Salah Timings</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f4f4f9; }
+        .container { max-width: 400px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .salah-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
+        .salah-name { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Today's Salah Times</h2>
+        <div id="times-list">Loading timings...</div>
+    </div>
+
+    <script>
+        // PASTE YOUR GOOGLE SHEET CSV LINK HERE
+        const csvUrl = 'YOUR_PUBLISHED_CSV_LINK_HERE';
+
+        async function fetchTimings() {
+            const response = await fetch(csvUrl);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1); // Skip the header row
+            let html = '';
+            
+            rows.forEach(row => {
+                const [name, time] = row.split(',');
+                if(name && time) {
+                    html += `<div class="salah-row"><span class="salah-name">${name}</span><span>${time}</span></div>`;
+                }
+            });
+            document.getElementById('times-list').innerHTML = html;
+        }
+        fetchTimings();
+    </script>
+</body>
+</html>
